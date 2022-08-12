@@ -6,7 +6,7 @@
         <div class="p-4">
             <div class="mb-4 flex items-center justify-between">
                 <JetButton type="button" @click="newItem">{{ createButtonTitle }}</JetButton>
-                <JetInput v-model="filters.search" type="search" class="h-9"/>
+                <JetInput v-model="filters.s" type="search" class="h-9"/>
             </div>
             <div class="table-wrap">
                 <table class="table">
@@ -14,19 +14,20 @@
                     <tr>
                         <th scope="col" class="w-20">
                             <div @click="sortBy('id')" class="flex items-center justify-between cursor-pointer">
-                                <fa v-if="sort.name === 'id'" :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
+                                <fa v-if="sort.col === 'id'" :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
                                 <div class="text-center flex-1">ID</div>
                             </div>
                         </th>
                         <th scope="col">
                             <div @click="sortBy('name')" class="flex items-center justify-between cursor-pointer">
-                                <fa v-if="sort.name === 'name'" :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
+                                <fa v-if="sort.col === 'name'" :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
                                 <div class="text-center flex-1">Name</div>
                             </div>
                         </th>
                         <th scope="col">
                             <div @click="sortBy('email')" class="flex items-center justify-between cursor-pointer">
-                                <fa v-if="sort.name === 'email'" :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
+                                <fa v-if="sort.col === 'email'"
+                                    :icon="sort.dir === 'asc' ? 'arrow-up' : 'arrow-down'"/>
                                 <div class="text-center flex-1">Email</div>
                             </div>
                         </th>
@@ -73,6 +74,13 @@
                     </tbody>
                 </table>
             </div>
+            <PaginationNavs
+                v-if="items.total"
+                :from="items.from"
+                :links="items.links"
+                :to="items.to"
+                :total="items.total"
+            />
         </div>
         <JetDialogModal :show="formDialog" @close="close">
             <template #title>
@@ -171,11 +179,16 @@ import JetInputError from '@/Components/InputError.vue';
 import JetLabel from '@/Components/Label.vue';
 import JetDialogModal from '@/Components/DialogModal.vue';
 import JetValidationErrors from '@/Components/ValidationErrors.vue';
+import PaginationNavs from "@/Components/PaginationNavs.vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
 import {pickBy, throttle} from "lodash";
 
 export default {
+    props: {
+        items: Object,
+        f: Object,
+    },
     components: {
         AppLayout,
         JetButton,
@@ -184,7 +197,8 @@ export default {
         JetInputError,
         JetLabel,
         JetDialogModal,
-        JetValidationErrors
+        JetValidationErrors,
+        PaginationNavs
     },
     data() {
         return {
@@ -193,7 +207,6 @@ export default {
             createButtonTitle: 'New user',
             createFormTitle: 'New user',
             editFormTitle: 'Edit user',
-            items: {},
             deleteDialog: false,
             formDialog: false,
             id: null,
@@ -204,19 +217,16 @@ export default {
                 password_confirmation: '',
             }),
             sort: {
-                name: 'id',
+                col: 'id',
                 dir: 'desc',
             },
             filters: {
-                search: '',
+                s: '',
                 id: '',
                 name: '',
                 email: '',
             }
         }
-    },
-    mounted() {
-        this.getItems()
     },
     watch: {
         filters: {
@@ -228,11 +238,13 @@ export default {
     },
     methods: {
         getItems() {
-            axios.get(route(`${this.routePrefix}.data`, pickBy({filters: this.filters, sort: this.sort})))
-                .then(response => this.items = response.data)
+            Inertia.visit(route(`${this.routePrefix}.index`, pickBy({...this.filters, ...this.sort})), {
+                preserveState: true,
+                only: ['items', 'f'],
+            })
         },
         sortBy(name) {
-            this.sort.name = name;
+            this.sort.col = name;
             this.sort.dir = this.sort.dir === 'asc' ? 'desc' : 'asc';
             this.getItems()
         },

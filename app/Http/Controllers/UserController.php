@@ -12,32 +12,39 @@ class UserController extends Controller
 {
     use PasswordValidationRules;
 
-    public function index()
-    {
-        return Inertia::render('Users/Index');
-    }
-
-    public function data()
+    private function data()
     {
         $items = User::query();
-        $items->when(request('filters.search'), function ($query, $search) {
+        $items->when(request('s'), function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where('id', 'like', '%'.$search.'%')
                       ->orWhere('name', 'like', '%'.$search.'%')
                       ->orWhere('email', 'like', '%'.$search.'%');
             });
         });
-        $items->when(request('filters.id'), function ($query, $value) {
+        $items->when(request('id'), function ($query, $value) {
             $query->whereId($value);
         });
-        $items->when(request('filters.name'), function ($query, $value) {
+        $items->when(request('name'), function ($query, $value) {
             $query->where('name', 'like', '%'.$value.'%');
         });
-        $items->when(request('filters.email'), function ($query, $value) {
+        $items->when(request('email'), function ($query, $value) {
             $query->where('name', 'like', '%'.$value.'%');
         });
-        $items->orderBy(request('sort.name', 'id'), request('sort.dir', 'desc'));
-        return $items->paginate();
+        $items->orderBy(request('col', 'id'), request('dir', 'desc'));
+
+        return $items->paginate(10, ['id', 'name', 'email'])
+                     ->withQueryString();
+    }
+
+    public function index()
+    {
+        $items = $this->data();
+
+        return Inertia::render('Users/Index', [
+            'items' => $items,
+            'f'     => request()->all(['s', 'id', 'name', 'email', 'col', 'dir']),
+        ]);
     }
 
     public function show(User $user)
