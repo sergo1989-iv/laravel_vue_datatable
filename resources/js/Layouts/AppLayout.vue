@@ -17,7 +17,7 @@ const showingNavigationDropdown = ref(false);
 
 const menu = [
     {href: route('dashboard'), name: 'dashboard', label: 'Dashboard'},
-    {href: route('user.index'), name: 'user.index', label: 'Users'},
+    {href: route('users.index'), name: 'users.index', label: 'Users'},
 ];
 
 const switchToTeam = (team) => {
@@ -36,8 +36,6 @@ const logout = () => {
 <template>
     <div>
         <Head :title="title" />
-
-        <JetBanner />
 
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
@@ -309,6 +307,8 @@ const logout = () => {
 
             <!-- Page Content -->
             <main>
+                <JetBanner />
+
                 <slot />
             </main>
         </div>

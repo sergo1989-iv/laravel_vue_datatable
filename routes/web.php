@@ -17,10 +17,10 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
+        'canLogin'       => Route::has('login'),
+        'canRegister'    => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'phpVersion'     => PHP_VERSION,
     ]);
 });
 
@@ -32,6 +32,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-    Route::post('/users/data', [\App\Http\Controllers\UserController::class, 'data'])->name('users.data');
+    Route::get('users/data', [\App\Http\Controllers\UserController::class, 'data'])->name('users.data');
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 });
