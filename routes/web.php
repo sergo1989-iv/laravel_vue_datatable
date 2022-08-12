@@ -32,4 +32,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::post('/users/data', [\App\Http\Controllers\UserController::class, 'data'])->name('users.data');
 });

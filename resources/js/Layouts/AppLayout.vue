@@ -15,6 +15,11 @@ defineProps({
 
 const showingNavigationDropdown = ref(false);
 
+const menu = [
+    {href: route('dashboard'), name: 'dashboard', label: 'Dashboard'},
+    {href: route('user.index'), name: 'user.index', label: 'Users'},
+];
+
 const switchToTeam = (team) => {
     Inertia.put(route('current-team.update'), {
         team_id: team.id,
@@ -49,8 +54,8 @@ const logout = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <JetNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
+                                <JetNavLink v-for="item in menu" :href="item.href" :active="route().current(item.name)">
+                                    {{ item.label }}
                                 </JetNavLink>
                             </div>
                         </div>
@@ -208,8 +213,8 @@ const logout = () => {
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <JetResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
+                        <JetResponsiveNavLink v-for="item in menu" :href="item.href" :active="route().current(item.name)">
+                            {{ item.label }}
                         </JetResponsiveNavLink>
                     </div>
 
