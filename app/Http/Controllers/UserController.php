@@ -6,6 +6,7 @@ use App\Actions\Fortify\PasswordValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -52,7 +53,9 @@ class UserController extends Controller
     {
         Validator::make(request()->all(), [
             'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email'    => [
+                'required', 'string', 'email', 'max:255', Rule::unique(User::class, 'email'),
+            ],
             'password' => $this->passwordRules(),
         ])->validate();
 
@@ -69,7 +72,9 @@ class UserController extends Controller
     {
         Validator::make(request()->all(), [
             'name'  => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users, email,'.$user->id],
+            'email' => [
+                'required', 'string', 'email', 'max:255', Rule::unique(User::class, 'email')->ignore($user->id),
+            ],
         ])->validate();
 
         $user->update([
