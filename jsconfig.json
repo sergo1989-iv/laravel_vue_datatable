@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["/Users/dev/PROJECTS/php/timberbot/resources/js/*"]
+        }
+    }
+}

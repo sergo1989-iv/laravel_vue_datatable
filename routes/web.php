@@ -32,5 +32,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::get('users/data', [\App\Http\Controllers\UserController::class, 'data'])->name('users.data');
     Route::resource('users', \App\Http\Controllers\UserController::class);
 });

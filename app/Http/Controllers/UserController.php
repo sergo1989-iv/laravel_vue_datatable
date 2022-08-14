@@ -12,39 +12,35 @@ class UserController extends Controller
 {
     use PasswordValidationRules;
 
-    private function data()
+    public function data()
     {
         $items = User::query();
-        $items->when(request('s'), function ($query, $search) {
+        $items->when(request('search'), function ($query, $search) {
             $query->where(function ($query) use ($search) {
                 $query->where('id', 'like', '%'.$search.'%')
                       ->orWhere('name', 'like', '%'.$search.'%')
                       ->orWhere('email', 'like', '%'.$search.'%');
             });
         });
-        $items->when(request('id'), function ($query, $value) {
+
+        $items->when(request('filters.id'), function ($query, $value) {
             $query->whereId($value);
         });
-        $items->when(request('name'), function ($query, $value) {
+        $items->when(request('filters.name'), function ($query, $value) {
             $query->where('name', 'like', '%'.$value.'%');
         });
-        $items->when(request('email'), function ($query, $value) {
-            $query->where('name', 'like', '%'.$value.'%');
+        $items->when(request('filters.email'), function ($query, $value) {
+            $query->where('email', 'like', '%'.$value.'%');
         });
-        $items->orderBy(request('col', 'id'), request('dir', 'desc'));
 
-        return $items->paginate(10, ['id', 'name', 'email'])
-                     ->withQueryString();
+        $items->orderBy(request('sortBy', 'id'), request('sortDir', 'desc'));
+
+        return $items->paginate(10, ['id', 'name', 'email']);
     }
 
     public function index()
     {
-        $items = $this->data();
-
-        return Inertia::render('Users/Index', [
-            'items' => $items,
-            'f'     => request()->all(['s', 'id', 'name', 'email', 'col', 'dir']),
-        ]);
+        return Inertia::render('Users/Index');
     }
 
     public function show(User $user)
@@ -66,7 +62,7 @@ class UserController extends Controller
             'password' => Hash::make(request('password')),
         ]);
 
-        return redirect()->back()->banner('User created!');
+        return redirect()->route('users.index')->banner('User created!');
     }
 
     public function update(User $user)
@@ -81,13 +77,13 @@ class UserController extends Controller
             'email' => request('email'),
         ]);
 
-        return redirect()->back()->banner('User updated!');
+        return redirect()->route('users.index')->banner('User updated!');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return redirect()->back()->banner('User deleted!');
+        return redirect()->route('users.index')->banner('User deleted!');
     }
 }
