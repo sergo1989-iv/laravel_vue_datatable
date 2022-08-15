@@ -1,9 +1,6 @@
 <template>
-    <AppLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ pageTitle }}</h2>
-        </template>
-        <div class="p-4">
+    <AppLayout :title="pageTitle">
+        <template #header>{{ pageTitle }}</template>
             <DataTable
                 :create-title="createFormTitle"
                 :edit-title="editFormTitle"
@@ -18,57 +15,28 @@
                 :form="form"
             >
                 <template #form-content>
-                    <div>
-                        <JetLabel for="name" value="Name"/>
-                        <JetInput
-                            id="name"
-                            v-model="form.name"
-                            type="text"
-                            class="mt-1 block w-full"
-                            required
-                            autofocus
-                            autocomplete="name"
-                        />
-                        <JetInputError :message="form.errors.name" class="mt-2"/>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Name</span>
+                        <input type="text" class="form-control" :class="{'is-invalid': form.errors.name}" v-model="form.name" required autocomplete="name">
+                        <div class="invalid-feedback">{{ form.errors.name }}</div>
                     </div>
-                    <div class="mt-4">
-                        <JetLabel for="email" value="Email"/>
-                        <JetInput
-                            id="email"
-                            v-model="form.email"
-                            type="email"
-                            class="mt-1 block w-full"
-                            required
-                        />
-                        <JetInputError :message="form.errors.email" class="mt-2"/>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Email</span>
+                        <input type="email" class="form-control" :class="{'is-invalid': form.errors.email}" v-model="form.email" required autocomplete="email">
+                        <div class="invalid-feedback">{{ form.errors.email }}</div>
                     </div>
-                    <div class="mt-4">
-                        <JetLabel for="password" value="Password"/>
-                        <JetInput
-                            id="password"
-                            v-model="form.password"
-                            type="password"
-                            class="mt-1 block w-full"
-                            required
-                            autocomplete="new-password"
-                        />
-                        <JetInputError :message="form.errors.password" class="mt-2"/>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Password</span>
+                        <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" v-model="form.password" required autocomplete="new-password">
+                        <div class="invalid-feedback">{{ form.errors.password }}</div>
                     </div>
-                    <div class="mt-4">
-                        <JetLabel for="password_confirmation" value="Confirm Password"/>
-                        <JetInput
-                            id="password_confirmation"
-                            v-model="form.password_confirmation"
-                            type="password"
-                            class="mt-1 block w-full"
-                            required
-                            autocomplete="new-password"
-                        />
-                        <JetInputError :message="form.errors.password_confirmation" class="mt-2"/>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Confirm Password</span>
+                        <input type="password" class="form-control" :class="{'is-invalid': form.errors.password_confirmation}" v-model="form.password_confirmation" required autocomplete="new-password">
+                        <div class="invalid-feedback">{{ form.errors.password_confirmation }}</div>
                     </div>
                 </template>
             </DataTable>
-        </div>
     </AppLayout>
 </template>
 <script>
