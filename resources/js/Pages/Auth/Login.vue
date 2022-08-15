@@ -37,52 +37,34 @@ const submit = () => {
             <JetAuthenticationCardLogo />
         </template>
 
-        <JetValidationErrors class="mb-4" />
+        <JetValidationErrors class="mb-3" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status" class="mb-3 text-sm text-success">
             {{ status }}
         </div>
 
         <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="email" value="Email" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" :class="{'is-invalid': form.errors.email}" id="email" v-model="form.email" required autocomplete="email" autofocus>
+                <div class="invalid-feedback">{{ form.errors.email }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="password" value="Password" />
-                <JetInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" id="password" v-model="form.password" required autocomplete="password">
+                <div class="invalid-feedback">{{ form.errors.password }}</div>
             </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <JetCheckbox v-model:checked="form.remember" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" v-model="form.remember" name="remember" id="remember">
+                <label class="form-check-label" for="remember">Remember me</label>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+            <button type="submit" class="btn btn-dark w-100 my-3" :disabled="form.processing">
+                Log in
+            </button>
+            <div class="text-center">
+                <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm">
                     Forgot your password?
                 </Link>
-
-                <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </JetButton>
             </div>
         </form>
     </JetAuthenticationCard>
