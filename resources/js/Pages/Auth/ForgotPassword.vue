@@ -27,35 +27,18 @@ const submit = () => {
         <template #logo>
             <JetAuthenticationCardLogo />
         </template>
-
-        <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-        </div>
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
+        <p>Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.</p>
+        <div v-if="status" class="mb-3 text-sm text-success">{{ status }}</div>
         <JetValidationErrors class="mb-4" />
-
         <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="email" value="Email" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" :class="{'is-invalid': form.errors.email}" id="email" v-model="form.email" required autocomplete="email" autofocus>
+                <div class="invalid-feedback">{{ form.errors.email }}</div>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
-                </JetButton>
-            </div>
+            <button type="submit" class="btn btn-dark w-100 my-3" :disabled="form.processing">
+                Email Password Reset Link
+            </button>
         </form>
     </JetAuthenticationCard>
 </template>

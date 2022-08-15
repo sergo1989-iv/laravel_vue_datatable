@@ -28,56 +28,30 @@ const submit = () => {
 
 <template>
     <Head title="Reset Password" />
-
     <JetAuthenticationCard>
         <template #logo>
             <JetAuthenticationCardLogo />
         </template>
-
         <JetValidationErrors class="mb-4" />
-
         <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="email" value="Email" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" :class="{'is-invalid': form.errors.email}" id="email" v-model="form.email" required autocomplete="email" autofocus>
+                <div class="invalid-feedback">{{ form.errors.email }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="password" value="Password" />
-                <JetInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" id="password" v-model="form.password" required autocomplete="new-password">
+                <div class="invalid-feedback">{{ form.errors.password }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
-                <JetInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password_confirmation}" id="password_confirmation" v-model="form.password_confirmation" required autocomplete="new-password">
+                <div class="invalid-feedback">{{ form.errors.password_confirmation }}</div>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
-                </JetButton>
-            </div>
+            <button type="submit" class="btn btn-dark w-100 my-3" :disabled="form.processing">
+                Reset Password
+            </button>
         </form>
     </JetAuthenticationCard>
 </template>

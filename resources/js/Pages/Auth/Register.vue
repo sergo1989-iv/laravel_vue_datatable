@@ -31,77 +31,42 @@ const submit = () => {
             <JetAuthenticationCardLogo />
         </template>
 
-        <JetValidationErrors class="mb-4" />
+        <JetValidationErrors class="mb-3" />
 
         <form @submit.prevent="submit">
-            <div>
-                <JetLabel for="name" value="Name" />
-                <JetInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" :class="{'is-invalid': form.errors.name}" id="name" v-model="form.name" required autocomplete="name" autofocus>
+                <div class="invalid-feedback">{{ form.errors.name }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="email" value="Email" />
-                <JetInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                />
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" :class="{'is-invalid': form.errors.email}" id="email" v-model="form.email" required autocomplete="email">
+                <div class="invalid-feedback">{{ form.errors.email }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="password" value="Password" />
-                <JetInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" id="password" v-model="form.password" required autocomplete="new-password">
+                <div class="invalid-feedback">{{ form.errors.password }}</div>
             </div>
-
-            <div class="mt-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
-                <JetInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="new-password"
-                />
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password_confirmation}" id="password_confirmation" v-model="form.password_confirmation" required autocomplete="new-password">
+                <div class="invalid-feedback">{{ form.errors.password_confirmation }}</div>
             </div>
-
-            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-                <JetLabel for="terms">
-                    <div class="flex items-center">
-                        <JetCheckbox id="terms" v-model:checked="form.terms" name="terms" />
-
-                        <div class="ml-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900">Privacy Policy</a>
-                        </div>
-                    </div>
-                </JetLabel>
+            <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" v-model="form.terms" name="terms" id="terms">
+                <label class="form-check-label" for="terms">
+                    I agree to the <a target="_blank" :href="route('terms.show')">Terms of Service</a> and <a target="_blank" :href="route('policy.show')">Privacy Policy</a>
+                </label>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
+            <button type="submit" class="btn btn-dark w-100 my-3" :disabled="form.processing">
+                Register
+            </button>
+            <div class="text-center">
+                <Link :href="route('login')" class="text-sm">
                     Already registered?
                 </Link>
-
-                <JetButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Register
-                </JetButton>
             </div>
         </form>
     </JetAuthenticationCard>

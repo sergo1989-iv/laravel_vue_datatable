@@ -51,7 +51,7 @@ const submit = () => {
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" id="password" v-model="form.password" required autocomplete="password">
+                <input type="password" class="form-control" :class="{'is-invalid': form.errors.password}" id="password" v-model="form.password" required autocomplete="current-password">
                 <div class="invalid-feedback">{{ form.errors.password }}</div>
             </div>
             <div class="form-check">
